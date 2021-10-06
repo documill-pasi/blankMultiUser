@@ -1,0 +1,75 @@
+
+<flowSequence xmlns="http://dynamo.documill.com/schemas/flow"
+              xmlns:fl="http://dynamo.documill.com/schemas/taglib/core/flow"
+              xmlns:cc="http://dynamo.documill.com/schemas/taglib/core/conditional"
+              xmlns:cv="http://dynamo.documill.com/schemas/taglib/core/var"
+              id="SendEmail"
+              name="Subroutine Flow">
+  <startFlow id="Start send email">
+    <events>
+      <defaultEvent step="Start send email" />
+    </events>
+    <steps>
+      <step id="Start send email" name="Start send email">
+        <logic>
+          <cv:setBoolean var="saveToRecord" value="true" />
+          <fl:next step="Save PDF" />
+        </logic>
+      </step>
+      <flowStep id="Save PDF" name="Save PDF" sequenceID="SavePDF" sequenceSrc="" nextStep="After save">
+        <initialization />
+      </flowStep>
+      <step id="After save" name="After save">
+        <logic >
+          <cc:choose>
+            <cc:when test="${flowStatus == &apos;error&apos;}">
+              <fl:next label="Error" step="Error" />
+            </cc:when>
+            <cc:otherwise>
+              <cc:if test="${not empty dynSettings.email.template}">
+                <cv:getContent var="dynEmailTemplate" dap="${doc}" resource="${dynSettings.email.template}" />
+              </cc:if>
+              <!-- Account id for selectable contact listing -->
+              <cv:set var="dynAccountId" value="" />
+              <fl:next label="OK" step="Email editor" />
+            </cc:otherwise>
+          </cc:choose>
+        </logic>
+      </step>
+      <flowStep id="Email editor" name="Email editor" sequenceID="EmailEditor" sequenceSrc="${dynamoCommonEngage}" nextStep="After send">
+        <initialization />
+      </flowStep>
+      <step id="After send" name="After send">
+        <logic>
+          <cc:choose>
+            <cc:when test="${flowStatus == &apos;error&apos;}">
+              <fl:next label="Error" step="Error" />
+            </cc:when>
+            <cc:when test="${flowStatus == &apos;cancel&apos;}">
+              <fl:next label="Cancel" step="Cancel" />
+            </cc:when>
+            <cc:otherwise>
+              <fl:next label="OK" step="OK" />
+            </cc:otherwise>
+          </cc:choose>
+        </logic>
+      </step>
+      <step id="OK" name="OK">
+        <logic>
+          <cv:set var="flowStatus" value="ok" />
+        </logic>
+      </step>
+      <step id="Cancel" name="Cancel">
+        <logic>
+          <cv:set var="flowStatus" value="cancel" />
+        </logic>
+      </step>
+      <step id="Error" name="Error">
+        <logic>
+          <fl:next step="Show error" />
+        </logic>
+      </step>
+      <screenStep id="Show error" name="Show error" screen="Subflows/SendEmail/Show errorScreen.html" />
+    </steps>
+  </startFlow>
+</flowSequence>

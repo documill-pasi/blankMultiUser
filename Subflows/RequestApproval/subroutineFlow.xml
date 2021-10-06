@@ -1,0 +1,56 @@
+
+<flowSequence xmlns="http://dynamo.documill.com/schemas/flow"
+              xmlns:cc="http://dynamo.documill.com/schemas/taglib/core/conditional"
+              xmlns:cl="http://dynamo.documill.com/schemas/taglib/core/loop"
+              xmlns:cv="http://dynamo.documill.com/schemas/taglib/core/var"
+              xmlns:dbg="http://dynamo.documill.com/schemas/taglib/debug"
+              xmlns:ddoc="http://dynamo.documill.com/schemas/taglib/dynamodoc"
+              xmlns:dt="http://dynamo.documill.com/schemas/taglib/date"
+              xmlns:fl="http://dynamo.documill.com/schemas/taglib/core/flow"
+              xmlns:fo="http://dynamo.documill.com/schemas/taglib/format"
+              xmlns:fs="http://dynamo.documill.com/schemas/taglib/formselect"
+              xmlns:htmlex="http://dynamo.documill.com/schemas/taglib/html/external"
+              xmlns:pdf="http://dynamo.documill.com/schemas/taglib/pdf"
+              xmlns:sfch="http://dynamo.documill.com/schemas/taglib/salesforce/chatter"
+              xmlns:sfcrud="http://dynamo.documill.com/schemas/taglib/salesforce/crud"
+              xmlns:sfem="http://dynamo.documill.com/schemas/taglib/salesforce/email"
+              xmlns:sff="http://dynamo.documill.com/schemas/taglib/salesforce/fields"
+              xmlns:sffile="http://dynamo.documill.com/schemas/taglib/salesforce/file"
+              xmlns:soql="http://dynamo.documill.com/schemas/taglib/salesforce/soql"
+              xmlns:wizard="http://dynamo.documill.com/schemas/taglib/wizard"
+              xmlns:xlsxd="http://dynamo.documill.com/schemas/taglib/xlsxdata"
+              xmlns:es="http://dynamo.documill.com/schemas/taglib/esignature"
+              xmlns:dex="http://dynamo.documill.com/schemas/taglib/docx/external"
+              xmlns:sfpub="http://dynamo.documill.com/schemas/taglib/salesforce/publish"
+              xmlns:pdfsig="http://dynamo.documill.com/schemas/taglib/pdf/signature"
+              id="RequestApproval"
+              name="Subroutine Flow">
+  <startFlow id="Start">
+    <events>
+      <defaultEvent step="Start ApprovalLogic" />
+    </events>
+    <steps>
+      <step id="Start ApprovalLogic" name="Start ApprovalLogic">
+        <logic >
+          <cc:choose>
+            <cc:when test="${versionNumber == versionNumberSaved}">
+              <fl:next step="Request approval" label="Request approval" />
+            </cc:when>
+            <cc:otherwise>
+              <fl:next step="Save document" label="Save" />
+            </cc:otherwise>
+          </cc:choose>
+        </logic>
+      </step>
+      <flowStep id="Save document" name="Save document" sequenceID="SaveDocument" sequenceSrc="" nextStep="Request approval">
+        <initialization />
+      </flowStep>
+      <flowStep id="Request approval" name="Request approval" sequenceID="InternalReviewRequest" sequenceSrc="${dynamoCommonEngage}" nextStep="Return">
+        <initialization />
+      </flowStep>
+      <step id="Return" name="Return">
+        <logic />
+      </step>
+    </steps>
+  </startFlow>
+</flowSequence>

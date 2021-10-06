@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html id="Main/Select documentScreen.html" name="Main/Select documentScreen.html">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="dynamo-type" content="form" />
+  <link rel="stylesheet" type="dynamo/css" href="Main/style.css" />
+</head>
+
+<body>
+  <div class="screen">
+    <div id="screenDialogContainer">
+      <div id="screenDialog">
+        <div id="screenDialogHeader" style="display: flex; justify-content: space-between" class="slds-modal__header">
+          <h1>Documents</h1>
+          <button dyn-next="Exit" name="exit" type="submit" dyn-next-message="Exit" style="border: none; background-color: transparent;font-size: 1.5em">x</button>
+        </div>
+        <div id="screenDialogBody">
+          <div dyn-repeat="relatedDynDocs" dyn-repeat-var="i" style="border-bottom: 1px solid silver; padding-bottom: 4px;padding-top: 4px;">
+            <div style="display: flex; justify-content: space-between;">
+              <div>
+                <div>
+                  <span dyn-content="i.Name" style="font-size: 1.2em">[name]</span>
+                </div>
+                <div>
+                  Status: <span dyn-content="i.dynamo__Document_Status__c">[status]</span>
+                </div>
+                <div>
+                  Last modified: <span dyn-content="i.LastModifiedDate">[modified]</span>
+                </div>
+                <div>
+                  Created: <span dyn-content="i.CreatedDate">[created]</span>
+                </div>
+              </div>
+              <div style="width: 40px;">
+                <button style="height: 100%; width: 100%; border: 1px none;" dyn-next="Open" dyna-name="i.Id" name="docId" type="submit" dyn-next-message="Loading document">&gt;</button>
+              </div>
+            </div>
+
+          </div>
+          <div class="group" style="margin-top: 20px;">
+            <button class="slds-button slds-button--neutral" dyn-next="New" name="new" type="submit" dyn-next-message="Creating Document">New Document</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

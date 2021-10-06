@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="dynamo-type" content="email" />
+  <title>Re-share</title>
+  <link href="Email Styles/style.css" rel="stylesheet" type="dynamo/css" />
+
+
+</head>
+
+<body class="">
+  <div class="document block-view">
+    <div class="group editable-area" dyn-model="edit_email_intro" dyn-model-editorconfig="editorSettings">
+      <p style="margin:0px;margin-bottom: 4px;font-family: sans-serif;">Dear <span class="inline dyn-tagged" dyn-content="receiverFullName" dyn-editable="false">[Name]</span>,</p>
+
+      <p style="margin:0px;font-family: sans-serif;">Please open re-shared document from this link:</p>
+
+      <p id="generic-61s0-zl2n" style="margin:0px;font-family: sans-serif;">&#160;</p>
+    </div>
+
+    <p style="margin:0px;font-family: sans-serif;"><a dyn-content="documentName" dyn-href="documentLink" href="#">[documentName]</a></p>
+    <p style="margin:0px;font-family: sans-serif;">&#160;</p>
+
+    <div class="group editable-area" dyn-model="edit_email_outro" dyn-model-editorconfig="editorSettings">
+      <p style="margin:0px;font-family: sans-serif;">Regards,<br />
+        <span dyn-content="UserInfo.fullName">[userInfo.fullName]</span></p>
+      <p style="margin:0px;font-family: sans-serif;">&#160;</p>
+      <p style="margin:0px;margin-top: 15px;font-size: small;font-family: sans-serif;">Powered by <a href="https://documill.com/dynamo">Documill Dynamo</a></p>
+    </div>
+  </div>
+</body>
+
+</html>

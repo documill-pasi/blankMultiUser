@@ -1,0 +1,40 @@
+
+<flowSequence xmlns="http://dynamo.documill.com/schemas/flow"
+              xmlns:fl="http://dynamo.documill.com/schemas/taglib/core/flow"
+              xmlns:cc="http://dynamo.documill.com/schemas/taglib/core/conditional"
+              xmlns:cv="http://dynamo.documill.com/schemas/taglib/core/var"
+              xmlns:htmlex="http://dynamo.documill.com/schemas/taglib/html/external"
+              id="ComposeDocument"
+              name="Subroutine Flow">
+  <startFlow id="Start">
+    <events>
+      <defaultEvent step="Compose" />
+    </events>
+    <steps>
+      <step id="Compose" name="Compose" onError="Error">
+        <logic >
+          <fl:composeContent template="${doc[documentTemplateName]}" var="composedDoc" hideFromDataTab="true" editable="false" automaticElementIDs="false" />
+          <cv:set var="fullPDF" />
+          <fl:composeContent var="composedDocEdit" editable="true" automaticElementIDs="false" hideFromDataTab="true" template="${doc[documentTemplateName]}" />
+          <cc:choose>
+            <cc:when test="${composeContent_containsEditable}">
+              <cv:set var="buttonEditDisable" value="false" />
+            </cc:when>
+            <cc:otherwise>
+              <cv:set var="buttonEditDisable" value="true" />
+            </cc:otherwise>
+          </cc:choose>
+          <htmlex:scanHeadings var="headings" file="${composedDoc}" selectors="" />
+          <cc:if test="${not empty headings}">
+            <fl:composeContent template="${doc[documentTemplateName]}" var="composedDoc" hideFromDataTab="true" editable="false" automaticElementIDs="false" />
+          </cc:if>
+        </logic>
+      </step>
+      <step id="Error" name="Error">
+        <logic>
+          <cv:set var="composedDoc" />
+        </logic>
+      </step>
+    </steps>
+  </startFlow>
+</flowSequence>

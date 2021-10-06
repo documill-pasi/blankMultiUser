@@ -1,0 +1,149 @@
+<html id="Main/View screenScreen.html" name="Main/New PreviewScreen.html">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="form" name="dynamo-type" />
+  <link rel="stylesheet" type="dynamo/css" href="Main/style.css" />
+</head>
+
+<body>
+
+  <div id="screen-container" class="screen slds">
+
+    <div id="screen-header" class="group">
+
+      <div id="screen-header-left">
+        <span id="screen-header-left-name" style="font-size: 1.5em" dyn-content="dynDocName">[Dynamo Document Name]</span>
+        <span id="screen-header-left-version" dyn-if="versionNumberSaved &gt; 0" class="slds-badge" dyn-content="${&#039;ver &#039;}${versionNumberSaved}">[version]</span>
+        <span id="screen-header-left-message" dyn-if="not empty saveTime">&#160;|&#160;
+        <span dyn-if="not empty saveMessage" dyn-content="saveMessage">[message]</span>&#160;
+        <span dyn-content="saveTime" dyn-if="not empty saveTime" dyn-content-format="&#039;justTime&#039;">[dateTime]</span></span>
+      </div>
+      <div id="screen-header-center">
+        <div id="screen-header-center-buttons" class="slds-button-group">
+
+          <button type="submit" dyn-next="Handle buttons" class="form-inline slds-button slds-button--neutral" dyn-disabled="viewMode == &#039;default&#039;" dyn-next-message="Starting view" name="default" dyn-if="dynButton.document">Document</button>
+
+
+          <button type="submit" class="form-inline slds-button slds-button--neutral" dyn-if="dynButton.compare" dyn-next-message="Comparing" name="compare" dyn-next="Handle buttons" dyn-disabled="viewMode == &#039;compare&#039; or versionNumber &lt; 2">Compare</button>
+          <button type="submit" dyn-next="Handle buttons" class="form-inline slds-button slds-button--neutral" dyn-disabled="viewMode == &#039;report&#039;" dyn-next-message="Generating activity report" name="report" dyn-if="dynButton.report">Status Report</button>
+          <button type="submit" dyn-next="Handle buttons" class="form-inline slds-button slds-button--neutral" dyn-disabled="viewMode == &#039;pdf&#039;" dyn-next-message="Starting PDF preview" name="pdf" dyn-if="dynButton.pdf">PDF</button>
+
+
+          <button id="editButton" type="submit" dyn-next="Edit button handler" class="form-inline slds-button slds-button--neutral" name="edit" dyn-next-message="Starting editor" dyn-disabled="buttonEditDisable" dyn-if="dynButton.edit">Edit</button>
+
+        </div>
+
+      </div>
+      <div id="screen-header-right" class="button-group">
+        <button id="button-share" type="submit" dyn-next="Share" class="form-inline slds-button slds-button--neutral" dyn-next-message="Preparing to share" name="share" dyn-if="dynButton.share">Share</button>
+
+        <button id="button-email" type="submit" dyn-next="Handle buttons" class="form-inline slds-button slds-button--neutral" dyn-next-message="Preparing to send email" name="email" dyn-if="dynButton.email">Email</button>
+
+        <button id="button-approve" type="submit" dyn-next="Approve" class="form-inline slds-button slds-button--neutral" name="approve" dyn-if="dynButton.approve" dyn-next-message="Approving" dyn-disabled="buttonApproveDisabled">Approve</button>
+
+        <button id="button-reject" type="submit" dyn-next="Reject" class="form-inline slds-button slds-button--neutral" name="reject" dyn-if="dynButton.reject" dyn-next-message="Rejecting" dyn-disabled="buttonRejectDisabled">Reject</button>
+
+        <button id="button-request-approval" type="submit" dyn-next="Request approval" class="form-inline slds-button slds-button--neutral" name="requestApproval" dyn-if="dynButton.requestApproval" dyn-next-message="Preparing">Request Approval</button>
+
+        <span style="font-size: 1.1em; margin-left: 10px; margin-right: 10px;" dyn-if="not empty dynDocStatus" dyn-content="dynDocStatus">[dynDocStatus]</span>
+
+        <button id="button-draft" type="submit" dyn-next="To draft" class="form-inline slds-button slds-button--neutral" name="draft" dyn-next-message="Refreshing data" dyn-if="dynButton.draft">Change to draft</button>
+        
+        <button id="button-withdraw" type="submit" dyn-next="Withdraw" class="form-inline slds-button slds-button--neutral" name="withdraw" dyn-if="dynButton.withdraw" dyn-next-message="Refreshing data">Withdraw</button>
+
+        <button id="button-refresh" type="submit" dyn-next="Refresh data" class="form-inline slds-button slds-button--neutral" name="refresh" dyn-if="dynButton.refresh" dyn-next-message="Refreshing data">Refresh</button>
+        
+        <button id="button-exit" style="color: firebrick" type="submit" dyn-next="Handle buttons" class="form-inline slds-button slds-button--neutral" name="exit" dyn-next-message="Returning to Record">Exit</button>
+        
+      </div>
+
+      <div id="screen-header-right-mobile">
+        <div id="mobile-menu-button" onclick="if(document.getElementById('mobile-menu').style.display == 'none'){document.getElementById('mobile-menu').style.display='block'} else {document.getElementById('mobile-menu').style.display='none'}">
+          <svg viewBox="0 0 80 80" height="25">
+    <rect y="15" width="80" height="10" rx="8"></rect>
+    <rect y="35" width="80" height="10" rx="8"></rect>
+    <rect y="55" width="80" height="10" rx="8"></rect>
+</svg>
+        </div>
+      </div>
+
+    </div>
+
+    <div dyn-if="viewMode == &#039;pdf&#039;" id="screen-content">
+      <dyn-pdf-viewer source="${fullPDF}">PDF Content</dyn-pdf-viewer>
+    </div>
+
+    <div dyn-if="viewMode == &#039;report&#039;" id="screen-content">
+
+      <div class="group" id="screen-document-notoolbar" dyn-content="reportDoc">[reportDoc]</div>
+    </div>
+
+    <div dyn-if="viewMode == &#039;default&#039; or viewMode == &#039;compare&#039;" id="screen-content">
+      <div id="screen-content-left" class="group" dyn-if="showInternalComments">
+        <dyn-sfdc-chatter-doclinker record-id="dynDocId" mention-options="mentionOptions" starting-post-id="postID" />
+      </div>
+      <div id="screen-content-center">
+
+        <div dyn-if="viewMode == &#039;default&#039;" class="group" id="screen-document-notoolbar">
+          <div id="approvalCriteriaInfo" dyn-if="approvalRequired and not empty dynSettings.approval.criteriaInfo">
+            <span dyn-content="dynSettings.approval.criteriaInfo">[approvalInfo]</span>
+          </div>
+          <div dyn-content="composedDoc">
+            [composedDoc]
+          </div>
+        </div>
+
+        <div dyn-if="viewMode == &#039;compare&#039;" id="screen-document-notoolbar">
+          <div id="comparisonInfo" dyn-if="prevVersion < versionNumber">
+            Showing differences between version <span dyn-content="prevVersion">[prevVersion]</span> and version <span dyn-content="versionNumber">[versionNumber]</span>
+          </div>
+          <div id="comparisonInfo" dyn-if="prevVersion == versionNumber">
+            Only one version <span dyn-content="versionNumber">[versionNumber]</span>
+          </div>
+          <div dyn-diff="prevDoc" dyn-diff-newer="composedDoc">
+            [comparison]
+          </div>
+        </div>
+
+      </div>
+
+      <div id="screen-content-right" dyn-if="showExternalComments and not empty externalFeed" class="group">
+        <dyn-sfdc-feed-doclinker view-only="externalFeedViewOnly" feed-source="externalFeed" object-type="&#039;dynamo__Dynamo_Document_Event__c&#039;" content-field="&#039;dynamo__Message__c&#039;" fields-set-on-create="externalFeedFields" comment-source="externalReplyFeed"
+          comment-object-type="&#039;dynamo__Dynamo_Document_Event__c&#039;" comment-content-field="&#039;dynamo__Message__c&#039;" comment-fields-set-on-create="externalReplyFeedFields" comment-link-field="&#039;dynamo__Parent_Event__c&#039;" />
+      </div>
+    </div>
+
+    <div id="mobile-menu" style="display: none;">
+
+      <div class="mobile-menu-item">
+        <button type="submit" dyn-next="Approve" class="form-inline slds-button slds-button--neutral mobile-menu-item-button" name="approve" dyn-if="dynButton.approve" dyn-next-message="Approving" dyn-disabled="buttonApproveDisabled">Approve</button>
+      </div>
+      <div class="mobile-menu-item">
+        <button type="submit" dyn-next="Reject" class="form-inline slds-button slds-button--neutrall mobile-menu-item-button" name="reject" dyn-if="dynButton.reject" dyn-next-message="Rejecting" dyn-disabled="buttonRejectDisabled">Reject</button>
+      </div>
+      <div class="mobile-menu-item">
+        <button type="submit" dyn-next="Request approval" class="form-inline slds-button slds-button--neutral mobile-menu-item-button" name="requestApproval" dyn-if="dynButton.requestApproval" dyn-next-message="Preparing">Request Approval</button>
+      </div>
+      <div class="mobile-menu-item">
+        <button class="form-inline slds-button slds-button--neutral mobile-menu-item-button" type="submit" dyn-next="Share" dyn-next-message="Preparing to share" name="share" dyn-if="dynButton.share">Share</button>
+      </div>
+      <div class="mobile-menu-item">
+        <button type="submit" dyn-next="Handle buttons" class="form-inline slds-button slds-button--neutral mobile-menu-item-button" dyn-next-message="Preparing to send email" name="email" dyn-if="dynButton.email">Email</button>
+      </div>
+      
+      <div class="mobile-menu-item">
+      <button type="submit" dyn-next="To draft" class="form-inline slds-button slds-button--neutral mobile-menu-item-button" name="draft" dyn-next-message="Refreshing data" dyn-if="dynButton.draft">Change to draft</button>
+      </div>
+      
+      <div class="mobile-menu-item">
+        <button style="color: firebrick" type="submit" dyn-next="Handle buttons" class="form-inline slds-button slds-button--neutral mobile-menu-item-button" name="exit" dyn-next-message="Returning to Record">Exit</button>
+      </div>
+    </div>
+
+  </div>
+
+
+</body>
+
+</html>

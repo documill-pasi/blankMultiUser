@@ -1,0 +1,42 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" id="Main/Select PDF fileScreen.html" name="Main/Select PDF fileScreen.html"><head>
+  <meta charset="utf-8" />
+  <meta name="dynamo-type" content="form" />
+  <link rel="stylesheet" type="dynamo/css" href="Main/style.css" />
+</head>
+
+<body>
+  <div class="screen">
+    <div id="screenDialogContainer">
+      <div id="screenDialog">
+        <div id="screenDialogHeader" style="display: flex; justify-content: space-between" class="slds-modal__header">
+          <h1>Select related PDF file</h1>
+          <button dyn-next="Exit" name="exit" type="submit" dyn-next-message="Exit" style="border: none; background-color: transparent;font-size: 1.5em">x</button>
+        </div>
+        <div id="screenDialogBody">
+          <div dyn-repeat="otherPdfList" dyn-repeat-var="i" style="border-bottom: 1px solid silver; padding-bottom: 4px;padding-top: 4px;">
+            <div style="display: flex; justify-content: space-between;">
+              <div>
+                <div>
+                  <span dyn-content="i.ContentDocument.Title" style="font-size: 1.2em">[name]</span>
+                </div>
+                <div>
+                  Created: <span dyn-content="i.ContentDocument.CreatedDate">[created]</span>
+                </div>
+              </div>
+              <div style="width: 40px;">
+                <button style="height: 100%; width: 100%; border: 1px none;" dyn-next="Save PDF file selection" dyna-name="i.ContentDocument.Id" name="select PDF" type="submit" dyn-next-message="Loading document">&gt;</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+</body></html>
